@@ -1,0 +1,45 @@
+A U.S graduate school has students from Asia, Europe and America. 
+The students' location information are stored in table student as below.
+ 
+| name   | continent |
+|--------|-----------|
+| Jack   | America   |
+| Pascal | Europe    |
+| Xi     | Asia      |
+| Jane   | America   |
+ 
+Pivot the continent column in this table so that each name is sorted alphabetically and displayed underneath its corresponding continent. 
+The output headers should be America, Asia and Europe respectively. It is guaranteed that the student number from America is no less than
+either Asia or Europe.
+ 
+For the sample input, the output is:
+ 
+| America | Asia | Europe |
+|---------|------|--------|
+| Jack    | Xi   | Pascal |
+| Jane    |      |        |
+ 
+Follow-up: If it is unknown which continent has the most students, can you write a query to generate the student report?
+
+SOLUTION:
+
+select America,Asia,Europe
+from
+(select @am:=0,@as:=0,@eu:=0) as t,
+(select @am:=@am+1 as id, name as America
+from student
+where continent='America'
+order by America) as america
+left join 
+(select @as:=@as+1 as id, name as Asia
+from student
+where continent='Asia'
+order by Asia) as asia
+on america.id = asia.id
+left join
+(select @eu:=@eu+1 as id, name as Europe
+from student
+where continent='Europe'
+order by Europe) as europe
+on europe.id = america.id
+;
