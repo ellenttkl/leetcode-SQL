@@ -34,8 +34,9 @@ Result table:
 +-----------+-----------+
 
 solution:
-SELECT player_id,device_id
-FROM Activity
-WHERE event_date IN (SELECT MIN(event_date)
-                     FROM Activity
-                     GROUP BY player_id);
+select a.player_id, a.device_id
+from activity a, (select player_id, min(event_date) as first_login
+                from activity
+                group by player_id) as b
+where a.player_id=b.player_id and a.event_date = b.first_login
+;
