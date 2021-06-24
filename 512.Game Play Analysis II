@@ -40,3 +40,11 @@ from activity a, (select player_id, min(event_date) as first_login
                 group by player_id) as b
 where a.player_id=b.player_id and a.event_date = b.first_login
 ;
+
+or 
+
+select t.player_id,t.device_id
+from (select player_id,device_id,min(event_date) as first_login
+      from activity
+      group by player_id) as t
+;
