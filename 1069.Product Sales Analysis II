@@ -54,6 +54,14 @@ Result table:
 
 SOLUTION:
 
-SELECT product_id,SUM(quantity) AS total_quantity
-FROM sales
-GROUP BY product_id;
+select t.product_id, if(t.quantity is not null, sum(t.quantity),0) as total_quantity
+from
+(select s.product_id,s.quantity
+from sales s left join product p 
+on s.product_id = p.product_id
+union 
+select p.product_id,s.quantity
+from sales s right join product p
+on s.product_id = p.product_id) as t
+group by t.product_id
+; 
