@@ -62,3 +62,11 @@ HAVING COUNT(employee_id)=(SELECT COUNT(employee_id)
                            FROM project
                            GROUP BY project_id
                            ORDER BY COUNT(employee_id) DESC LIMIT 1);
+                           
+                           
+or:
+
+select project_id
+from project
+group by project_id
+order by count(*) desc limit 1;
