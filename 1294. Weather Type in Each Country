@@ -1,0 +1,93 @@
+Country table: Countries
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| country_id    | int     |
+| country_name  | varchar |
++---------------+---------+
+country_id is the primary key of this table.
+Each row of this table has two columns, country_id and country_name.
+ 
+
+Weather table: Weather
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| country_id    | int     |
+| weather_state | varchar |
+| day           | date    |
++---------------+---------+
+(country_id, day) is the composite primary key of the table.
+Each row of this table records the weather conditions of a certain country on a certain day.
+ 
+
+Write a SQL to find the weather type of each country in the table in November 2019.
+
+The definition of weather type is as follows: when the average value of weather_state is less than or equal to 15 return Cold, when the average value of weather_state is greater than or equal to 25, return Hot, otherwise return Warm.
+
+You can return your query results in any order.
+
+The query result format is as follows:
+
+Countries table:
++------------+--------------+
+| country_id | country_name |
++------------+--------------+
+| 2          | USA          |
+| 3          | Australia    |
+| 7          | Peru         |
+| 5          | China        |
+| 8          | Morocco      |
+| 9          | Spain        |
++------------+--------------+
+Weather table:
++------------+---------------+------------+
+| country_id | weather_state | day        |
++------------+---------------+------------+
+| 2          | 15            | 2019-11-01 |
+| 2          | 12            | 2019-10-28 |
+| 2          | 12            | 2019-10-27 |
+| 3          | -2            | 2019-11-10 |
+| 3          | 0             | 2019-11-11 |
+| 3          | 3             | 2019-11-12 |
+| 5          | 16            | 2019-11-07 |
+| 5          | 18            | 2019-11-09 |
+| 5          | 21            | 2019-11-23 |
+| 7          | 25            | 2019-11-28 |
+| 7          | 22            | 2019-12-01 |
+| 7          | 20            | 2019-12-02 |
+| 8          | 25            | 2019-11-05 |
+| 8          | 27            | 2019-11-15 |
+| 8          | 31            | 2019-11-25 |
+| 9          | 7             | 2019-10-23 |
+| 9          | 3             | 2019-12-23 |
++------------+---------------+------------+
+Result table:
++--------------+--------------+
+| country_name | weather_type |
++--------------+--------------+
+| USA          | Cold         |
+| Austraila    | Cold         |
+| Peru         | Hot          |
+| China        | Warm         |
+| Morocco      | Hot          |
++--------------+--------------+
+
+Solutions:
+
+select e.country_name, (case when avg(w.weather_state)<=15 then 'cold'
+                            when avg(w.weather_state)>=25 then 'hot'
+                            else 'warm'
+                        end) as weather_type
+from weather w left join countries c
+on w.country_id = c.country_id
+where w.day between '2019-11-01' and '2019-11-30'
+groupby w.country_id;
+
+
+
+
+
+
